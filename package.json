@@ -3,16 +3,13 @@
   "displayName": "Monotainer: Docker Dashboard",
   "publisher": "monosyde",
   "description": "VS Code dashboard for managing Docker containers, images, and volumes.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "engines": {
     "vscode": "^1.99.0"
   },
+  "icon": "repo-assets/icon.png",
   "categories": [
     "Other"
-  ],
-  "activationEvents": [
-    "onCommand:monotainer.listContainers",
-    "onCommand:monotainer.openContainerDashboard"
   ],
   "main": "./dist/extension.js",
   "contributes": {

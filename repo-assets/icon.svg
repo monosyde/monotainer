@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg width='128' height='128' viewBox='0 0 128 128' xmlns='http://www.w3.org/2000/svg'>
+<rect width='128' height='128' rx='26' fill='#04070D'/>
+<defs>
+  <linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'>
+    <stop offset='0%' stop-color='#11253D'/>
+    <stop offset='100%' stop-color='#07101D'/>
+  </linearGradient>
+  <filter id='shadow' x='-40%' y='-40%' width='180%' height='180%'>
+    <feDropShadow dx='0' dy='10' stdDeviation='12' flood-color='#031429' flood-opacity='0.95'/>
+  </filter>
+</defs>
+<circle cx='64' cy='64' r='50' fill='url(#g)' filter='url(#shadow)'/>
+<path d='M32,44 A44,44 0 0,1 96,44' stroke='#3EA6FF' stroke-width='10' fill='none' stroke-linecap='round' opacity='0.9'/>
+<rect x='35' y='74' width='58' height='23' rx='14' fill='none' stroke='#3EA6FF' stroke-width='9' opacity='0.95'/>
+<text x='64' y='72' text-anchor='middle' font-family='Segoe UI, Arial, sans-serif' font-size='53' font-weight='600' fill='#A855F7'>M</text>
+</svg>
