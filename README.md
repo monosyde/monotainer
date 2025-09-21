@@ -1,4 +1,4 @@
-# Docker Workspace Dashboard
+# Monotainer: Docker Dashboard
 
 Расширение для VS Code, которое предоставляет простую панель управления Docker: контейнеры, образы и тома доступны прямо в редакторе.
 
