@@ -1,0 +1,52 @@
+{
+  "name": "monotainer",
+  "displayName": "Monotainer: Docker Dashboard",
+  "publisher": "monosyde",
+  "description": "VS Code dashboard for managing Docker containers, images, and volumes.",
+  "version": "0.1.2",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:monotainer.listContainers",
+    "onCommand:monotainer.openContainerDashboard"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "monotainer.listContainers",
+        "title": "Show Active Containers",
+        "category": "Monotainer"
+      },
+      {
+        "command": "monotainer.openContainerDashboard",
+        "title": "Open Dashboard",
+        "category": "Monotainer"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "watch": "tsc -w -p .",
+    "lint": "echo 'No lint configured'",
+    "test": "echo 'No tests configured'",
+    "package": "vsce package",
+    "publish": "vsce publish",
+    "login": "vsce login monotainer"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/monosyde/monotainer.git"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "@types/vscode": "1.99.0",
+    "@vscode/vsce": "^3.6.0",
+    "typescript": "^5.9.2"
+  }
+}

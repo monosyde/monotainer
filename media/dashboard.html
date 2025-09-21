@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="{{lang}}">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src {{cspSource}} https: data:; style-src {{cspSource}}; script-src 'nonce-{{nonce}}' {{cspSource}};" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Docker Dashboard</title>
+  <link rel="stylesheet" href="{{styleUri}}" />
+</head>
+<body>
+  <div class="workspace" id="workspace">
+  <header class="top-bar">
+    <h1 data-i18n="dashboard.title"></h1>
+    <div class="top-bar__controls">
+      <label class="scale-switcher">
+        <span data-i18n="scale.label"></span>
+        <select id="scale-select">
+          <option value="1">100%</option>
+          <option value="0.9">90%</option>
+          <option value="0.8">80%</option>
+          <option value="0.7">70%</option>
+        </select>
+      </label>
+      <label class="language-switcher">
+        <span data-i18n="language.label"></span>
+        <select id="language-select">
+          <option value="en">English</option>
+          <option value="ru">Русский</option>
+        </select>
+      </label>
+      <button id="refresh" type="button" data-i18n="button.refresh"></button>
+    </div>
+  </header>
+
+  <div class="status-bar">
+    <span id="status" data-loading="true"></span>
+  </div>
+
+  <div class="segmented" id="resource-tabs">
+    <button class="active" type="button" data-resource="container" data-i18n="tabs.containers"></button>
+    <button type="button" data-resource="image" data-i18n="tabs.images"></button>
+    <button type="button" data-resource="volume" data-i18n="tabs.volumes"></button>
+  </div>
+
+  <div class="dashboard" id="dashboard-root">
+    <section class="resource-view" data-resource-view="container">
+      <article class="panel panel--list" data-resource-panel="container">
+        <div class="panel__header">
+          <h2 class="panel__title" data-i18n="containers.title"></h2>
+          <span class="badge" id="container-count">0</span>
+        </div>
+        <div class="panel__body">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="containers.table.name"></th>
+                  <th data-i18n="containers.table.image"></th>
+                  <th data-i18n="containers.table.status"></th>
+                </tr>
+              </thead>
+              <tbody id="container-body"></tbody>
+            </table>
+          </div>
+          <div id="container-empty" class="message-card" hidden data-i18n="containers.empty"></div>
+          <div id="container-error" class="message-card" hidden></div>
+        </div>
+      </article>
+
+      <div class="splitter" data-splitter="container" aria-hidden="true"></div>
+
+      <article class="panel panel--detail" data-resource-detail="container">
+        <div id="container-placeholder" class="message-card" data-i18n="containers.placeholder"></div>
+        <div class="detail" id="container-detail" hidden>
+          <div class="detail__heading">
+            <div class="detail__title" id="container-detail-name"></div>
+            <div class="detail__actions" id="container-actions">
+              <button type="button" data-action="start" data-i18n="containers.actions.start"></button>
+              <button type="button" data-action="restart" data-i18n="containers.actions.restart"></button>
+              <button type="button" data-action="stop" data-i18n="containers.actions.stop"></button>
+              <button type="button" data-action="remove" data-i18n="containers.actions.remove"></button>
+              <button type="button" data-action="exec" data-i18n="containers.actions.exec"></button>
+            </div>
+          </div>
+          <div class="detail__meta detail__chips">
+            <span id="container-detail-id" data-prefix="containers.detail.idPrefix"></span>
+            <span id="container-detail-image" data-prefix="containers.detail.imagePrefix"></span>
+            <span id="container-detail-status"></span>
+          </div>
+          <div class="tab-nav" id="container-tabs">
+            <button class="active" type="button" data-container-tab="logs" data-i18n="tabs.logs"></button>
+            <button type="button" data-container-tab="inspect" data-i18n="tabs.inspect"></button>
+            <button type="button" data-container-tab="stats" data-i18n="tabs.stats"></button>
+          </div>
+          <div class="tab-toolbar" id="container-log-toolbar">
+            <button type="button" data-action="logs-more" data-i18n="containers.logs.more"></button>
+          </div>
+          <div class="tab-panel active" data-container-panel="logs"></div>
+          <div class="tab-panel" data-container-panel="inspect"></div>
+          <div class="tab-panel" data-container-panel="stats"></div>
+          <div class="detail__timestamp" id="container-detail-updated"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="resource-view" data-resource-view="image" hidden>
+      <article class="panel panel--list" data-resource-panel="image">
+        <div class="panel__header">
+          <h2 class="panel__title" data-i18n="images.title"></h2>
+          <span class="badge" id="image-count">0</span>
+        </div>
+        <div class="panel__body">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="images.table.repository"></th>
+                  <th data-i18n="images.table.tag"></th>
+                  <th data-i18n="images.table.size"></th>
+                  <th data-i18n="images.table.created"></th>
+                </tr>
+              </thead>
+              <tbody id="image-body"></tbody>
+            </table>
+          </div>
+          <div id="image-empty" class="message-card" hidden data-i18n="images.empty"></div>
+          <div id="image-error" class="message-card" hidden></div>
+        </div>
+      </article>
+
+      <div class="splitter" data-splitter="image" aria-hidden="true"></div>
+
+      <article class="panel panel--detail" data-resource-detail="image">
+        <div id="image-placeholder" class="message-card" data-i18n="images.placeholder"></div>
+        <div class="detail" id="image-detail" hidden>
+          <div class="detail__heading">
+            <div class="detail__title" id="image-detail-name"></div>
+            <div class="detail__actions" id="image-actions">
+              <button type="button" data-image-action="remove" data-i18n="images.actions.remove"></button>
+            </div>
+          </div>
+          <div class="detail__meta detail__chips">
+            <span id="image-detail-id" data-prefix="images.detail.idPrefix"></span>
+            <span id="image-detail-created" data-prefix="images.detail.createdPrefix"></span>
+            <span id="image-detail-size" data-prefix="images.detail.sizePrefix"></span>
+          </div>
+          <div class="tab-nav" id="image-tabs">
+            <button class="active" type="button" data-image-tab="inspect" data-i18n="tabs.inspect"></button>
+            <button type="button" data-image-tab="history" data-i18n="tabs.history"></button>
+          </div>
+          <div class="tab-panel active" data-image-panel="inspect"></div>
+          <div class="tab-panel" data-image-panel="history"></div>
+          <div class="detail__timestamp" id="image-detail-updated"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="resource-view" data-resource-view="volume" hidden>
+      <article class="panel panel--list" data-resource-panel="volume">
+        <div class="panel__header">
+          <h2 class="panel__title" data-i18n="volumes.title"></h2>
+          <span class="badge" id="volume-count">0</span>
+        </div>
+        <div class="panel__body">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="volumes.table.name"></th>
+                  <th data-i18n="volumes.table.driver"></th>
+                  <th data-i18n="volumes.table.mount"></th>
+                </tr>
+              </thead>
+              <tbody id="volume-body"></tbody>
+            </table>
+          </div>
+          <div id="volume-empty" class="message-card" hidden data-i18n="volumes.empty"></div>
+          <div id="volume-error" class="message-card" hidden></div>
+        </div>
+      </article>
+
+      <div class="splitter" data-splitter="volume" aria-hidden="true"></div>
+
+      <article class="panel panel--detail" data-resource-detail="volume">
+        <div id="volume-placeholder" class="message-card" data-i18n="volumes.placeholder"></div>
+        <div class="detail" id="volume-detail" hidden>
+          <div class="detail__heading">
+            <div class="detail__title" id="volume-detail-name"></div>
+            <div class="detail__actions" id="volume-actions">
+              <button type="button" data-volume-action="remove" data-i18n="volumes.actions.remove"></button>
+            </div>
+          </div>
+          <div class="detail__meta detail__chips">
+            <span id="volume-detail-driver" data-prefix="volumes.detail.driverPrefix"></span>
+            <span id="volume-detail-mount" data-prefix="volumes.detail.mountPrefix"></span>
+            <span id="volume-detail-created" data-prefix="volumes.detail.createdPrefix"></span>
+          </div>
+          <div class="tab-nav" id="volume-tabs">
+            <button class="active" type="button" data-volume-tab="inspect" data-i18n="tabs.inspect"></button>
+          </div>
+          <div class="tab-panel active" data-volume-panel="inspect"></div>
+          <div class="detail__timestamp" id="volume-detail-updated"></div>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  </div>
+
+  <script nonce="{{nonce}}">
+    window.__DASHBOARD_DATA__ = {
+      locale: '{{lang}}',
+      translations: {{i18nPayload}},
+      supportedLocales: {{supportedLocales}}
+    };
+  </script>
+  <script nonce="{{nonce}}" src="{{scriptUri}}"></script>
+</body>
+</html>
